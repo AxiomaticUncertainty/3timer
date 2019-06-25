@@ -4,6 +4,10 @@ var mean = document.getElementById("avg");
 var solvePanel = document.getElementById("solve_panel");
 
 var isOn = false;
+var holdStart = null;
+var count = true;
+var down = false;
+
 var start = null
 var inter = null
 
@@ -12,11 +16,36 @@ var solves = [];
 scramble.innerHTML = generateScramble(20);
 
 window.onkeydown = function(e) {
-  var key = e.keyCode ? e.keyCode : e.which;
+  if (!down) {
+    var key = e.keyCode ? e.keyCode : e.which;
 
-  if (key == 32) {
-    onClick();
+    if (key == 32) {
+      if (isOn) {
+        onClick();
+      } else {
+        holdStart = performance.now();
+        console.log(holdStart);
+      }
+    }
+
+    down = true;
   }
+}
+
+window.onkeyup = function(e) {
+  var key = e.keycode ? e.keycode : e.which;
+
+  console.log(performance.now());
+  console.log(performance.now() - holdStart);
+
+  if (key == 32 && performance.now() - holdStart >= 100) {
+    if (count) {
+      onClick();
+    }
+    count = !count;
+  }
+
+  down = false;
 }
 
 function onClick() {
