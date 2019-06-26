@@ -1,0 +1,10 @@
+.menu {
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.menu:hover {
+  border-radius: 15px;
+}
