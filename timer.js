@@ -13,6 +13,20 @@ var inter = null
 
 var solves = [];
 
+if (Cookies.get("3Timer")) {
+  var s = JSON.parse(Cookies.get("3Timer"));
+  for (var i = 0; i < s.length; i++) {
+    solves.push(parseFloat(s[i]));
+  }
+  Cookies.remove("3Timer");
+}
+
+var l = "";
+for (var i = 0; i < solves.length; i++) {
+  l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
+}
+solvePanel.innerHTML = l;
+
 scramble.innerHTML = generateScramble(20);
 
 window.onkeydown = function(e) {
@@ -38,7 +52,7 @@ window.onkeyup = function(e) {
   console.log(performance.now());
   console.log(performance.now() - holdStart);
 
-  if (key == 32 && performance.now() - holdStart >= 100) {
+  if (key == 32 && performance.now() - holdStart >= 50) {
     if (count) {
       onClick();
     }
@@ -60,6 +74,15 @@ function onClick() {
     window.clearInterval(inter);
     scramble.innerHTML = generateScramble(20);
 
+    /*var str = "";
+    for (var i = 0; i < solves.length; i++) {
+      str += solves[i] + " ";
+    }*/
+    if (Cookies.get("3Timer")) {
+      Cookies.remove("3Timer");
+    }
+    Cookies.set("3Timer", JSON.stringify(solves));
+
     if (solves.length > 0) {
       var total = 0;
       for (var i = 0; i < solves.length; i++) {
@@ -68,11 +91,7 @@ function onClick() {
 
       mean.innerHTML = "Mean: " + Math.round(total*100/solves.length)/100 + "s";
 
-      var l = "";
-      for (var i = 0; i < solves.length; i++) {
-        l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
-      }
-      solvePanel.innerHTML = l;
+      reloadSolves();
     }
   }
   isOn = !isOn;
@@ -128,4 +147,18 @@ function generateScramble(length) {
   }
 
   return s;
+}
+
+function clearTimes() {
+  Cookies.remove("3Timer");
+  solves = [];
+  reloadSolves();
+}
+
+function reloadSolves() {
+  var l = "";
+  for (var i = 0; i < solves.length; i++) {
+    l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
+  }
+  solvePanel.innerHTML = l;
 }
