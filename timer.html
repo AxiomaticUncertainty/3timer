@@ -7,12 +7,23 @@
     <a href="home.html"><img src="banner.jpg" width="30%" height="30%"></a>
   </head>
   <body>
-    <p id="scramble" style="font-size:30px">loading...</p>
+    <table style="width: 100%">
+      <td><p id="scramble" style="font-size:30px">loading...</p></td>
+      <td>Scramble type:</td>
+      <td>
+        <select id="sType">
+          <option value="wca">Random State (WCA Official)</option>
+          <option value="fast">Random Move Sequence</option>
+        </select>
+      </td>
+    </table>
     <h1 id="time" style="font-size:100px; border-width:thin">0.00s</h1>
     <p id="avg">Mean: N/A</p>
     <h2>Times:</h2>
     <div id="solve_panel" style="height: 100px; width: 200px; border: 1px solid #000; overflow: auto; white-space: pre-wrap"></div>
     <button onclick="clearTimes()" style="font-weight: bold">Clear Times</button>
+
+    <script src="scrambo/scrambo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="timer.js"></script>
   </body>

@@ -3,6 +3,11 @@ var scramble = document.getElementById("scramble");
 var mean = document.getElementById("avg");
 var solvePanel = document.getElementById("solve_panel");
 
+// TODO add functionality for scramble method selection
+
+// var seeded_scramble = new Scrambo().type('333').seed(1).get();
+// alert(seeded_scramble);
+
 var isOn = false;
 var holdStart = null;
 var count = true;
@@ -27,7 +32,7 @@ for (var i = 0; i < solves.length; i++) {
 }
 solvePanel.innerHTML = l;
 
-scramble.innerHTML = generateScramble(20);
+scramble.innerHTML = generateScramble(20, true);
 
 window.onkeydown = function(e) {
   if (!down) {
@@ -72,7 +77,8 @@ function onClick() {
     time.innerHTML = t.toFixed(2) + "s";
     solves.push(t);
     window.clearInterval(inter);
-    scramble.innerHTML = generateScramble(20);
+    scramble.innerHTML = "Loading...";
+    scramble.innerHTML = generateScramble(20, true);
 
     /*var str = "";
     for (var i = 0; i < solves.length; i++) {
@@ -101,58 +107,65 @@ function updateDisplay() {
   time.innerHTML = (Math.round((performance.now() - start)/10)/100).toFixed(2) + "s";
 }
 
-function generateScramble(length) {
-  var s = "";
+ // fast or wca official
+function generateScramble(length, wca) { // wca is a boolean
+  if (!wca) {
+    var s = "";
 
-  var previous = null;
-  for (var i = 0; i < length; i++) {
-    var finished = false;
-    while (!finished) {
-      var current = null;
-      switch (Math.floor(Math.random()*6)) {
-        case 0:
-          current = "U";
-          break;
-        case 1:
-          current = "F";
-          break;
-        case 2:
-          current = "R";
-          break;
-        case 3:
-          current = "B";
-          break;
-        case 4:
-          current = "L";
-          break;
-        case 5:
-          current = "D";
-          break;
+    var previous = null;
+    for (var i = 0; i < length; i++) {
+      var finished = false;
+      while (!finished) {
+        var current = null;
+        switch (Math.floor(Math.random()*6)) {
+          case 0:
+            current = "U";
+            break;
+          case 1:
+            current = "F";
+            break;
+          case 2:
+            current = "R";
+            break;
+          case 3:
+            current = "B";
+            break;
+          case 4:
+            current = "L";
+            break;
+          case 5:
+            current = "D";
+            break;
+        }
+
+        if (current != previous) {
+          finished = true;
+          previous = current;
+          s += current;
+        }
       }
 
-      if (current != previous) {
-        finished = true;
-        previous = current;
-        s += current;
+      if (Math.random() >= 0.5) {
+        s += "2";
+      } else if (Math.random() >= 0.5) {
+        s += "'";
       }
+
+      s += " "
     }
 
-    if (Math.random() >= 0.5) {
-      s += "2";
-    } else if (Math.random() >= 0.5) {
-      s += "'";
-    }
-
-    s += " "
+    return s;
   }
 
-  return s;
+  console.log("Generating a WCA official scramble...");
+  return new Scrambo().get(1);
 }
 
 function clearTimes() {
   Cookies.remove("3Timer");
   solves = [];
   reloadSolves();
+  mean.innerHTML = "Mean: N/A";
 }
 
 function reloadSolves() {
