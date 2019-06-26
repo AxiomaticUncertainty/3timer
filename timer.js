@@ -169,6 +169,13 @@ function clearTimes() {
   mean.innerHTML = "Mean: N/A";
 }
 
+function removeLast() {
+  Cookies.remove("3Timer");
+  solves.pop();
+  Cookies.set("3Timer", JSON.stringify(solves));
+  reloadSolves();
+}
+
 function reloadSolves() {
   var l = "";
   for (var i = 0; i < solves.length; i++) {

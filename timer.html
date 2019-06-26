@@ -22,7 +22,10 @@
     <p id="avg">Mean: N/A</p>
     <h2>Times:</h2>
     <div id="solve_panel" style="height: 100px; width: 200px; border: 1px solid #000; overflow: auto; white-space: pre-wrap"></div>
-    <button onclick="clearTimes()" style="font-weight: bold">Clear Times</button>
+    <table style="width: 20%">
+      <button onclick="clearTimes()" style="font-weight: bold">Clear Times</button>
+      <button onclick="removeLast()" style="font-weight: bold">Delete Last</button>
+    </table>
 
     <script src="scrambo/scrambo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
