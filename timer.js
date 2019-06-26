@@ -2,6 +2,7 @@ var time = document.getElementById("time");
 var scramble = document.getElementById("scramble");
 var mean = document.getElementById("avg");
 var solvePanel = document.getElementById("solve_panel");
+var scrambleSelection = document.getElementById("sType");
 
 // TODO add functionality for scramble method selection
 
@@ -32,7 +33,7 @@ for (var i = 0; i < solves.length; i++) {
 }
 solvePanel.innerHTML = l;
 
-scramble.innerHTML = generateScramble(20, true);
+scramble.innerHTML = generateScramble(20);
 
 window.onkeydown = function(e) {
   if (!down) {
@@ -78,7 +79,7 @@ function onClick() {
     solves.push(t);
     window.clearInterval(inter);
     scramble.innerHTML = "Loading...";
-    scramble.innerHTML = generateScramble(20, true);
+    scramble.innerHTML = generateScramble(20);
 
     /*var str = "";
     for (var i = 0; i < solves.length; i++) {
@@ -108,8 +109,8 @@ function updateDisplay() {
 }
 
  // fast or wca official
-function generateScramble(length, wca) { // wca is a boolean
-  if (!wca) {
+function generateScramble(length) {
+  if (scrambleSelection.options[scrambleSelection.selectedIndex].value == "fast") {
     var s = "";
 
     var previous = null;
