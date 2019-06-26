@@ -3,6 +3,8 @@ var scramble = document.getElementById("scramble");
 var mean = document.getElementById("avg");
 var solvePanel = document.getElementById("solve_panel");
 var scrambleSelection = document.getElementById("sType");
+var ao5 = document.getElementById("ao5");
+var ao12 = document.getElementById("ao12");
 
 // TODO add functionality for scramble method selection
 
@@ -27,11 +29,7 @@ if (Cookies.get("3Timer")) {
   Cookies.remove("3Timer");
 }
 
-var l = "";
-for (var i = 0; i < solves.length; i++) {
-  l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
-}
-solvePanel.innerHTML = l;
+reloadSolves();
 
 scramble.innerHTML = generateScramble(20);
 
@@ -182,4 +180,21 @@ function reloadSolves() {
     l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
   }
   solvePanel.innerHTML = l;
+  ao5.innerHTML = "Average of 5: " + calculateStat(5);
+  ao12.innerHTML = "Average of 12: " + calculateStat(12);
+}
+
+function calculateStat(n) { // TODO -- make this method work with any # input for ao#
+  // calculate ao5
+  if (solves.length >= n) {
+    var lastFive = solves.slice(solves.length - n).sort(); // get last 5 solves in ascending order
+    lastFive = lastFive.slice(1, n-1); // gets median three solves and discards min and max
+    var sum = 0;
+    for (var i = 0; i < n-2; i++) {
+      sum += lastFive[i];
+    }
+    return Math.round(100*sum/(n-2))/100;
+  } else {
+    return "N/A";
+  }
 }
