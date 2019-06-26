@@ -1,6 +1,5 @@
 p {
   text-align: center;
-  margin-top: 2px;
 }
 
 h1 {
@@ -9,4 +8,32 @@ h1 {
   padding-bottom: 0px;
   margin-top: 10px;
   margin-bottom: 2px;
+}
+
+td {
+  vertical-align: center;
+}
+
+html {
+  overflow: auto;
+}
+
+.b {
+  border-radius: 5px;
+  background-color: #ffc36b;
+  border-width: 0px;
+  padding: 5px;
+}
+
+.b:hover {
+  background-color: #ffb74f;
+}
+
+#sidePanel {
+  background-color: #c0bfff;
+  width: 200px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 25px;
+  padding-top: 10px;
 }
