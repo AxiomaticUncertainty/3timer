@@ -9,3 +9,4 @@ Credit to Nick Colley for porting TNoodle's scramble technique (WCA) to JS. Find
 
 # To Do:
 - Add scramble options for different types of puzzles
+- Add DNF and +2 buttons/functionality
