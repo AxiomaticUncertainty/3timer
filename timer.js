@@ -5,6 +5,8 @@ var solvePanel = document.getElementById("solve_panel");
 var scrambleSelection = document.getElementById("sType");
 var ao5 = document.getElementById("ao5");
 var ao12 = document.getElementById("ao12");
+var menu = document.getElementById("menu");
+var added = false;
 
 // TODO add functionality for scramble method selection
 
@@ -24,7 +26,7 @@ var solves = [];
 if (Cookies.get("3Timer")) {
   var s = JSON.parse(Cookies.get("3Timer"));
   for (var i = 0; i < s.length; i++) {
-    solves.push(parseFloat(s[i]));
+    solves.push([parseFloat(s[i]), null]);
   }
   Cookies.remove("3Timer");
 }
@@ -74,7 +76,7 @@ function onClick() {
   } else {
     var t = (Math.round((performance.now() - start)/10)/100);
     time.innerHTML = t.toFixed(2) + "s";
-    solves.push(t);
+    solves.push([t, null]);
     window.clearInterval(inter);
     scramble.innerHTML = "Loading...";
     scramble.innerHTML = generateScramble(20);
@@ -88,16 +90,7 @@ function onClick() {
     }
     Cookies.set("3Timer", JSON.stringify(solves));
 
-    if (solves.length > 0) {
-      var total = 0;
-      for (var i = 0; i < solves.length; i++) {
-        total += solves[i];
-      }
-
-      mean.innerHTML = "Mean: " + Math.round(total*100/solves.length)/100 + "s";
-
-      reloadSolves();
-    }
+    reloadSolves();
   }
   isOn = !isOn;
 }
@@ -177,17 +170,26 @@ function removeLast() {
 function reloadSolves() {
   var l = "";
   for (var i = 0; i < solves.length; i++) {
-    l += (i + 1).toString() + ". " + solves[i] + "s &#10;";
+    l += (i + 1).toString() + ". " + (Math.round((solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0])*100)/100) + "s &#10;";
   }
   solvePanel.innerHTML = l;
   ao5.innerHTML = "Average of 5: " + calculateStat(5);
   ao12.innerHTML = "Average of 12: " + calculateStat(12);
+
+  calculateMean();
 }
 
 function calculateStat(n) { // TODO -- make this method work with any # input for ao#
   // calculate ao5
   if (solves.length >= n) {
-    var lastFive = solves.slice(solves.length - n).sort(); // get last 5 solves in ascending order
+    var lastFive = solves.slice(solves.length - n) // get last n solves
+    let temp = [];
+    lastFive.forEach(function(s) {
+      temp.push(s[1] == "+" ? s[0] + 2 : s[0]); // extract and adjust solves for their penalties (+2 only)
+    });
+
+    lastFive = temp.sort()
+    // // TODO: FIX FOR TUPLES
     lastFive = lastFive.slice(1, n-1); // gets median three solves and discards min and max
     var sum = 0;
     for (var i = 0; i < n-2; i++) {
@@ -196,5 +198,44 @@ function calculateStat(n) { // TODO -- make this method work with any # input fo
     return Math.round(100*sum/(n-2))/100;
   } else {
     return "N/A";
+  }
+}
+
+function closeMenu() {
+  menu.style.visibility = "hidden";
+}
+
+function openMenu() {
+  menu.style.visibility = "visible";
+}
+
+function plusTwo() {
+  if (solves[solves.length - 1][1] == null) {
+    solves[solves.length - 1][1] = "+";
+  } else {
+    solves[solves.length - 1][1] = null;
+  }
+
+  console.log(solves[solves.length - 1][1]);
+
+  solves[solves.length - 1][0] = Math.round(100*solves[solves.length - 1][0])/100;
+
+  added = !added;
+
+  reloadSolves();
+}
+
+function DNF() {
+  solves[solves.length - 1][1] = solves[solves.length - 1][1] == null ? "DNF" : null;
+}
+
+function calculateMean() { // TODO: change to get method
+  if (solves.length > 0) {
+    var total = 0;
+    for (var i = 0; i < solves.length; i++) {
+      total += solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0];
+    }
+
+    mean.innerHTML = "Mean: " + Math.round(total*100/solves.length)/100 + "s";
   }
 }

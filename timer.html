@@ -20,12 +20,18 @@
     </table>
     <h1 id="time" style="font-size:100px; border-width:thin">0.00s</h1>
     <p id="avg">Mean: N/A</p>
+    <div class="menu" id="menu" style="text-align: center; border-radius: 20px;">
+      <h2>Penalties</h2>
+      <table style="width: 20%; margin-bottom: 10%"><button onclick="DNF()" style="width: 20%; margin-right: 2%">DNF</button><button onclick="plusTwo()" style="width: 20%; margin-left: 2%">+2</button></table>
+      <button onclick="closeMenu()">Close</button>
+    </div>
     <div id="sidePanel">
       <h2>Times:</h2>
       <div id="solve_panel" style="height: 100px; width: 200px; border: 1px solid #000; overflow: auto; white-space: pre-wrap; background-color: #ffffff;"></div>
       <table style="width: 20%">
         <button onclick="clearTimes()" style="font-weight: bold" class="b">Clear Times</button>
         <button onclick="removeLast()" style="font-weight: bold" class="b">Delete Last</button>
+        <button onclick="openMenu()" style="font-weight: bold" class="b">Penalty</button>
       </table>
       <hr style="width: 10%; text-align: left"></hr>
       <p id="ao5" style="text-align: left">Average of 5: N/A</p>
