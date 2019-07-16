@@ -170,7 +170,7 @@ function removeLast() {
 function reloadSolves() {
   var l = "";
   for (var i = 0; i < solves.length; i++) {
-    l += (i + 1).toString() + ". " + (Math.round((solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0])*100)/100) + "s &#10;";
+    l += (i + 1).toString() + ". " + (Math.round((solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0])*100)/100) + "s" + (solves[i][1] ? "+" : "") + "&#10;";
   }
   solvePanel.innerHTML = l;
   ao5.innerHTML = "Average of 5: " + calculateStat(5);
