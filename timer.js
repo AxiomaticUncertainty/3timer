@@ -155,7 +155,11 @@ function generateScramble(length) {
   }
 
   console.log("Generating a WCA official scramble...");
-  return new Scrambo().get(1);
+  if (scrambleSelection.options[scrambleSelection.selectedIndex].value == "wca") {
+    return new Scrambo().type('333').get(1);
+  } else {
+    return new Scrambo().type('222').get(1);
+  }
 }
 
 function clearTimes() {
