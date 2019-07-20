@@ -26,8 +26,13 @@ var solves = [];
 if (Cookies.get("3Timer")) {
   var s = JSON.parse(Cookies.get("3Timer"));
   for (var i = 0; i < s.length; i++) {
-    solves.push([parseFloat(s[i]), null]);
+    solves.push([s[i], null]);
   }
+
+  for (var i = 0; i < s.length; i++) {
+    solves[i][0] = parseFloat(solves[i][0]);
+  }
+
   Cookies.remove("3Timer");
 }
 
@@ -88,7 +93,7 @@ function onClick() {
     if (Cookies.get("3Timer")) {
       Cookies.remove("3Timer");
     }
-    Cookies.set("3Timer", JSON.stringify(solves));
+    Cookies.set("3Timer", JSON.stringify(solves)); // switch to manual json
 
     reloadSolves();
   }
@@ -179,18 +184,31 @@ function reloadSolves() {
   calculateMean();
 }
 
-function calculateStat(n) { // TODO -- make this method work with any # input for ao#
-  // calculate ao5
+function calculateStat(n) {
+  // calculate aon
   if (solves.length >= n) {
     var lastFive = solves.slice(solves.length - n) // get last n solves
+
+    var t = [];
+    lastFive.forEach(function(s) {
+      if (s[1] != "DNF") {
+        t.push(s);
+      }
+    })
+
+    lastFive = t;
+
+    if (lastFive.length < n-1) {
+      return "DNF";
+    }
+
     let temp = [];
     lastFive.forEach(function(s) {
       temp.push(s[1] == "+" ? s[0] + 2 : s[0]); // extract and adjust solves for their penalties (+2 only)
     });
 
     lastFive = temp.sort()
-    // // TODO: FIX FOR TUPLES
-    lastFive = lastFive.slice(1, n-1); // gets median three solves and discards min and max
+    lastFive = lastFive.length == n ? lastFive.slice(1, n-1) : lastFive.slice(1, n); // gets median n-2 solves and discards min and max
     var sum = 0;
     for (var i = 0; i < n-2; i++) {
       sum += lastFive[i];
@@ -227,15 +245,24 @@ function plusTwo() {
 
 function DNF() {
   solves[solves.length - 1][1] = solves[solves.length - 1][1] == null ? "DNF" : null;
+
+  reloadSolves();
 }
 
 function calculateMean() { // TODO: change to get method
   if (solves.length > 0) {
     var total = 0;
+    var n = 0;
+
     for (var i = 0; i < solves.length; i++) {
-      total += solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0];
+      if (solves[i][1] != "DNF") {
+        total += solves[i][1] == "+" ? solves[i][0] + 2 : solves[i][0];
+        n++;
+      }
     }
 
-    mean.innerHTML = "Mean: " + Math.round(total*100/solves.length)/100 + "s";
+    var m = n > 0 ? Math.round(total*100/n)/100 : "N/A";
+
+    mean.innerHTML = "Mean: " + m + "s";
   }
 }
